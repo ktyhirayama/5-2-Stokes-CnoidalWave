@@ -2,6 +2,7 @@ c *** Making Profiles of 5th Stokes wave and 3rd Cnoidal wave **********
 c                                2022/10/08 Produced by Katsuya Hirayama
 c **********************************************************************
       parameter( kmax=100 )
+      character atheory*15
 
       write(*,*)
       write(*,*) 'Input water depth [in meters]:'
@@ -20,11 +21,14 @@ c **********************************************************************
       write(*,*) '   [1: Stokes wave ; 2: Cnoidal wave]'
       read(*,*) itheory
 
+      if(itheory.eq.1) atheory='Stokes wave'
+      if(itheory.eq.2) atheory='Cnoidal wave'
+
       open(10,file='input.dat',status='unknown')
-      write(10,'(a)') 'Properties of the wave:'
+      write(10,'(a20,a15)') 'Properties of the ', atheory
 
       open(20,file='profile.dat',status='unknown')
-      write(20,'(a30,a15)') 'Water surface elevation of',atheory
+      write(20,'(a30,a15)') 'Water surface elevation of ',atheory
       write(20,'(2a10)') '     Theta','       Eta'
 
       write(*,*) 'Input the terget phase which is normarized by 2*pi'
@@ -39,7 +43,6 @@ c **********************************************************************
 
       if( itheory.eq.1 )then
 
-        write(10,'(a15)') 'Stokes wave'
         call STK(5,D,T,H,RL,C)
 
         do kt = 0, kmax
@@ -59,7 +62,6 @@ c **********************************************************************
 
       else if( itheory.eq.2 )then
 
-        write(10,'(a15)') 'Cnoidal wave'
         call CND(3,D,T,H,RL,C)
 
         do kt = 0, kmax
